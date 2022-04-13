@@ -1,0 +1,23 @@
+.Scrollbar {
+  overflow-y: auto;
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background-color: #b5b6b700;
+  }
+
+  &:hover::-webkit-scrollbar-thumb {
+    background-color: #c2c3c47f;
+  }
+
+  &.padding {
+    padding-right: 10px;
+    margin-right: -10px;
+  }
+}

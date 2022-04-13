@@ -1,0 +1,48 @@
+.PickFrames {
+  &.small {
+    display: flex;
+    margin-top: 12px;
+
+    .PickFrame {
+      width: 80px;
+      flex-direction: column;
+      text-align: center;
+
+      img {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+.PickFrame {
+  display: flex;
+  padding: 10px;
+  align-items: center;
+  border-radius: 6px;
+  cursor: pointer;
+
+  &.selected {
+    color: #f07;
+    background-color: #f4f4f4;
+  }
+
+  &:hover {
+    img {
+      opacity: 1;
+    }
+  }
+
+  img {
+    width: 65px;
+    height: 65px;
+    border-radius: 5px;
+    margin-right: 20px;
+    transition: opacity 0.2s;
+    opacity: 0.8;
+  }
+
+  div {
+    font-weight: bold;
+  }
+}

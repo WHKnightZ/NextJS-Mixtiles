@@ -1,0 +1,22 @@
+@import "./color";
+@import "./fonts";
+@import "./custom";
+@import "./align";
+@import "./icon";
+
+@import "./components";
+@import "./pages";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Mulish", sans-serif;
+}
+
+.MuiContainer {
+  &-root {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+}

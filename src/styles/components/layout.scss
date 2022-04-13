@@ -1,0 +1,62 @@
+.Layout {
+  min-height: 100vh;
+  display: flex;
+  color: var(--cl-secondary);
+  background-color: #fff;
+}
+
+.Main {
+  flex-grow: 1;
+  width: calc(100% - 24px);
+  overflow-x: auto;
+}
+
+.Container {
+  padding: 65px 40px 20px;
+}
+
+.Navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  background-color: white;
+  box-shadow: 0 6px 14px #0000000f;
+  padding: 12px 24px 12px 20px;
+  z-index: 98;
+
+  &-inside {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &-menu.MuiButton-root {
+    min-width: 40px;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 50%;
+    font-size: 18px;
+  }
+
+  &-logo {
+    font-weight: 600;
+    font-size: 18px;
+  }
+}
+
+.background-gray {
+  background-color: #f9f9f9;
+  height: 100%;
+}
+
+@media screen and (max-width: 860px) {
+  .Container {
+    padding: 56px 16px 16px;
+  }
+
+  .Navbar {
+    padding: 12px 16px 12px 12px;
+  }
+}

@@ -1,0 +1,20 @@
+.Button {
+  &.Mui-disabled {
+    &.MuiButton-containedPrimary {
+      color: white;
+      opacity: 0.5;
+      background-color: var(--cl-primary);
+    }
+
+    &.MuiButton-text.MuiButton-textPrimary {
+      color: var(--cl-primary);
+      opacity: 0.5;
+    }
+
+    &.MuiButton-outlinedPrimary {
+      color: var(--cl-primary);
+      opacity: 0.5;
+      border: 1px solid rgba(25, 118, 210, 0.5);
+    }
+  }
+}

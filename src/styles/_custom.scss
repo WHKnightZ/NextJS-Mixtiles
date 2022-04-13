@@ -1,0 +1,146 @@
+body {
+  overflow-y: overlay;
+}
+
+input {
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus {
+    transition: background-color 5000000s ease-in-out 0s;
+  }
+
+  &::placeholder {
+    color: rgba(0, 0, 0, 0.6) !important;
+    opacity: 1 !important;
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.modal-loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: var(--cl-primary);
+}
+
+button {
+  white-space: nowrap;
+
+  &.Mui-disabled {
+    opacity: 0.5;
+
+    &.MuiButton-textPrimary {
+      color: var(--cl-primary) !important;
+    }
+
+    &.MuiButton-containedPrimary {
+      color: white !important;
+      background-color: var(--cl-primary);
+    }
+  }
+}
+
+.MuiCheckbox-root.Mui-checked.Mui-disabled {
+  color: var(--cl-primary);
+  opacity: 0.5;
+}
+
+.MuiDialogActions-root.MuiDialogActions-spacing {
+  padding: 16px 0 0 8px;
+
+  &.pt-0 {
+    padding-top: 0;
+  }
+}
+
+.a,
+a {
+  text-decoration: none;
+  color: var(--cl-primary);
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.75;
+  }
+}
+
+textarea {
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background-color: #b5b6b700;
+  }
+
+  &:hover::-webkit-scrollbar-thumb {
+    background-color: #c2c3c47f;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+    -webkit-transform: translate(0, 20px);
+    -ms-transform: translate(0, 20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(0);
+    -webkit-transform: translate(0, 0);
+    -ms-transform: translate(0, 0);
+  }
+}
+
+.fadeIn {
+  opacity: 0;
+  animation: fadeIn;
+  animation-duration: 1s;
+  animation-delay: 0.5s;
+  animation-fill-mode: forwards;
+
+  &.slow {
+    animation-delay: 1s;
+  }
+}
+
+@keyframes tileAppear {
+  0% {
+    width: 0;
+    opacity: 0;
+  }
+  50% {
+    width: 253px;
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  100% {
+    width: 253px;
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.tileAppear {
+  width: 253px;
+  height: 253px;
+  animation: tileAppear 0.6s;
+}

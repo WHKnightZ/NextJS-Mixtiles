@@ -1,0 +1,222 @@
+.PickPhotos {
+  display: flex;
+
+  &-getStarted {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 100px;
+    animation: fadeIn 0.6s;
+
+    .pick-photos-text {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      color: var(--cl-dark);
+    }
+  }
+
+  &-images {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 80px;
+
+    & > div {
+      margin: 10px;
+    }
+  }
+
+  .main {
+    width: calc(100% - 344px);
+  }
+
+  .menu {
+    width: 344px;
+    border-left: 1px solid rgba(0, 0, 0, 0.09);
+    background-color: white;
+    padding: 80px 28px 28px;
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100vh;
+  }
+}
+
+.UploadImage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 253px;
+  height: 253px;
+
+  &.first {
+    width: 267px;
+    height: 167px;
+  }
+
+  &-btn.MuiButton-root {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+    padding: 0;
+    background-color: white;
+    position: relative;
+    box-shadow: 0 4px 7px #8080802b;
+    transition: box-shadow 0.3s;
+    cursor: pointer;
+
+    &.no-radius {
+      border-radius: 0;
+    }
+
+    &:hover {
+      box-shadow: 0 15px 20px #0000000f, 0 4px 7px #8080802b;
+      background-color: white;
+
+      .overlay {
+        background-color: #0003;
+
+        &-btn {
+          opacity: 1;
+        }
+      }
+    }
+
+    .image-wrapper {
+      position: absolute;
+      z-index: 1;
+      inset: 0px 5px 8px 0px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: white;
+
+      div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+
+        .width {
+          width: 100%;
+        }
+
+        .height {
+          height: 100%;
+        }
+      }
+    }
+
+    .upload {
+      color: var(--cl-primary);
+
+      i {
+        font-size: 34px;
+      }
+
+      div {
+        font-size: 15px;
+        font-weight: bold;
+        margin-top: 8px;
+      }
+    }
+
+    .overlay {
+      z-index: 2;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s;
+      color: #fafafa;
+
+      &.loading {
+        background-color: #0003;
+      }
+
+      &-btn {
+        cursor: pointer;
+        position: absolute;
+        right: 22px;
+        overflow: hidden;
+        width: 36px;
+        height: 36px;
+        opacity: 0;
+        z-index: 5;
+        background-color: #fff;
+        box-shadow: 0 4px 4px #0000000d;
+        border-radius: 9px;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+          background-color: #eee;
+        }
+
+        &.btn-crop {
+          top: 20px;
+        }
+
+        &.btn-remove {
+          top: 64px;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 860px) {
+  .PickPhotos {
+    display: flex;
+
+    &-images {
+      margin-top: 40px;
+    }
+
+    .main {
+      width: 100%;
+    }
+
+    .menu {
+      display: none;
+    }
+  }
+}
+
+.image-frame {
+  top: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  background-color: transparent;
+  pointer-events: none;
+}
+
+.image-frame-wrapper {
+  margin: 8px auto 0;
+  position: relative;
+  filter: drop-shadow(rgba(0, 0, 0, 0.25) 4px 8px 12px) drop-shadow(rgba(0, 0, 0, 0.3) 2px 3px 8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media screen and (max-width: 860px) {
+  .Modal-crop {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
