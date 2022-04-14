@@ -8,7 +8,7 @@ const Navbar: React.FC = () => {
     <div className="Navbar">
       <div className="Navbar-inside">
         <Button className="Navbar-menu">
-          <i className="fas fa-bars" />
+          <i className="icon-bars" />
         </Button>
         <div className="Navbar-logo">
           <Link href="/">Mixtiles</Link>

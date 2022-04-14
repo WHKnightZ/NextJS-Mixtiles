@@ -37,34 +37,6 @@ export const theme = createTheme({
         },
       },
     },
-    MuiTableCell: {
-      styleOverrides: {
-        root: {
-          padding: 12,
-          fontSize: "14px",
-          color: "var(--cl-secondary)",
-          fontWeight: 500,
-        },
-        head: {
-          fontWeight: 600,
-        },
-      },
-    },
-    MuiTable: {
-      styleOverrides: {
-        root: {
-          tableLayout: "fixed",
-        },
-      },
-    },
-    MuiPaginationItem: {
-      styleOverrides: {
-        root: {
-          color: "var(--cl-secondary)",
-          fontWeight: 500,
-        },
-      },
-    },
     MuiInputLabel: {
       styleOverrides: {
         root: {

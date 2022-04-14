@@ -6,8 +6,6 @@ import { getLsPhotos, randomId, saveLsPhotos } from "utils";
 const PickPhotos: NextPage = () => {
   const inputRef = useRef<any>();
 
-  const { frameType: defaultFrameType, images: defaultImages } = getLsPhotos();
-
   const [images, setImages] = useState<
     {
       id: string;
@@ -20,9 +18,15 @@ const PickPhotos: NextPage = () => {
       croppedUrl?: string;
       crop?: { x: number; y: number };
     }[]
-  >(defaultImages || []);
+  >([]);
   const [modalCrop, setModalCrop] = useState<any>({ show: false, url: "" });
-  const [frameType, setFrameType] = useState(defaultFrameType || "blackBorder");
+  const [frameType, setFrameType] = useState("blackBorder");
+
+  useEffect(() => {
+    const { frameType: defaultFrameType, images: defaultImages } = getLsPhotos();
+    setImages(defaultImages || []);
+    setFrameType(defaultFrameType || "blackBorder");
+  }, []);
 
   const handleUploadFile = (e: any) => {
     const file = e.target.files?.[0];

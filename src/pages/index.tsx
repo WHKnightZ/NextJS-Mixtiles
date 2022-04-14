@@ -1,12 +1,16 @@
 import { Button, Layout } from "components";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { getLsPhotos } from "utils";
 
 const Home: NextPage = () => {
   const router = useRouter();
+  const [countImages, setCountImages] = useState(0);
 
-  const countImages = getLsPhotos()?.images?.length;
+  useEffect(() => {
+    setCountImages(getLsPhotos()?.images?.length || 0);
+  }, []);
 
   return (
     <Layout>

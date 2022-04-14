@@ -1,0 +1,45 @@
+@font-face {
+  font-family: 'icon';
+  src:  url('fonts/icon.eot?raiejh');
+  src:  url('fonts/icon.eot?raiejh#iefix') format('embedded-opentype'),
+    url('fonts/icon.ttf?raiejh') format('truetype'),
+    url('fonts/icon.woff?raiejh') format('woff'),
+    url('fonts/icon.svg?raiejh#icon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icon' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-bars:before {
+  content: "\e900";
+}
+.icon-camera:before {
+  content: "\e901";
+}
+.icon-crop:before {
+  content: "\e902";
+}
+.icon-plus:before {
+  content: "\e903";
+}
+.icon-remove:before {
+  content: "\e904";
+}
+.icon-search:before {
+  content: "\e905";
+}

@@ -73,10 +73,10 @@ const UploadImage: React.FC<Props> = ({
               ) : (
                 <>
                   <div className="overlay-btn btn-crop" onClick={(e) => handleClick(e, onCrop)} title="Cắt ảnh">
-                    <i className="icon icon-crop" />
+                    <i className="icon-crop" />
                   </div>
                   <div className="overlay-btn btn-remove" onClick={(e) => handleClick(e, onRemove)} title="Xóa ảnh">
-                    <i className="icon icon-remove" />
+                    <i className="icon-remove" />
                   </div>
                 </>
               )}
@@ -88,11 +88,11 @@ const UploadImage: React.FC<Props> = ({
           <div className="upload">
             {first ? (
               <>
-                <i className="fas fa-camera" />
+                <i className="icon-camera" />
                 <div>Tải ảnh lên</div>
               </>
             ) : (
-              <div className="icon icon-plus" />
+              <div className="icon-plus" />
             )}
           </div>
         </Button>

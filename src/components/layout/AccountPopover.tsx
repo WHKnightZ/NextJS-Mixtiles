@@ -9,17 +9,17 @@ const AccountPopover: React.FC = () => {
 
   const menuOptions = [
     {
-      label: "Câu hỏi thường gặp",
+      label: "Câu hỏi thường gặp 1",
       icon: "plus",
       linkTo: "#",
     },
     {
-      label: "Câu hỏi thường gặp",
+      label: "Câu hỏi thường gặp 2",
       icon: "plus",
       linkTo: "#",
     },
     {
-      label: "Câu hỏi thường gặp",
+      label: "Câu hỏi thường gặp 3",
       icon: "plus",
       linkTo: "#",
     },
@@ -89,7 +89,7 @@ const AccountPopover: React.FC = () => {
             style={{ color: "var(--cl-secondary)" }}
           >
             <Box mr={2} display="flex" alignItems="center">
-              <i className={`icon-sm ${option.icon}`} />
+              <i className={`icon-${option.icon}`} />
             </Box>
             {option.label}
           </MenuItem>
