@@ -59,7 +59,7 @@ const ModalCrop: React.FC<Props> = ({
     <Modal title="Cắt ảnh" show={show} size="sm" onBackdropClick={onClose}>
       <DialogContent className="Scrollbar Modal-crop" style={{ paddingTop: 12 }}>
         <div className="image-frame-wrapper" style={{ width: CANVAS_SIZE + 6, height: CANVAS_SIZE + 6 }}>
-          <img className="image-frame" alt="" src={frameWhite} />
+          <img className="image-frame" alt="" src={frameWhite.src} />
           <div
             style={{
               position: "relative",
