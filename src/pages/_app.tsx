@@ -4,9 +4,11 @@ import { theme } from "configs/theme";
 import "styles/index.scss";
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const AnyComponent = Component as any;
+
   return (
     <ThemeProvider theme={theme}>
-      <Component {...pageProps} />
+      <AnyComponent {...pageProps} />
     </ThemeProvider>
   );
 }
