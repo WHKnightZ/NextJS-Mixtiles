@@ -12,9 +12,6 @@
 /.next/
 /out/
 
-# production
-/build
-
 # misc
 .DS_Store
 *.pem
@@ -39,3 +36,7 @@ yarn-error.log*
 
 yarn.lock
 package-lock.json
+
+/build/cache
+/build/static
+/build/trace
