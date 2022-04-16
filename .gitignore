@@ -38,5 +38,4 @@ yarn.lock
 package-lock.json
 
 /build/cache
-/build/static
 /build/trace
