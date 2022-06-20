@@ -1,10 +1,13 @@
 import { Button, Layout, ModalCrop, PickFrames, UploadImage, uploadImage } from "components";
+import { apiUrls } from "configs/apis";
 import type { NextPage } from "next";
 import { useEffect, useRef, useState } from "react";
+import { useApis } from "services/api";
 import { getLsPhotos, randomId, saveLsPhotos } from "utils";
 
 const PickPhotos: NextPage = () => {
   const inputRef = useRef<any>();
+  const { apiPost } = useApis();
 
   const [images, setImages] = useState<
     {
@@ -17,10 +20,13 @@ const PickPhotos: NextPage = () => {
       widthGreater: boolean;
       croppedUrl?: string;
       crop?: { x: number; y: number };
+      file: any;
+      croppedFile?: any;
     }[]
   >([]);
   const [modalCrop, setModalCrop] = useState<any>({ show: false, url: "" });
   const [frameType, setFrameType] = useState("blackBorder");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const { frameType: defaultFrameType, images: defaultImages } = getLsPhotos();
@@ -45,7 +51,7 @@ const PickPhotos: NextPage = () => {
 
       setImages((images) => [
         ...images,
-        { id: randomId(), url, loading: true, widthGreater, zoom, minZoom: zoom, maxZoom },
+        { id: randomId(), url, loading: true, widthGreater, zoom, minZoom: zoom, maxZoom, file },
       ]);
 
       uploadImage(file, (url) => {
@@ -71,13 +77,48 @@ const PickPhotos: NextPage = () => {
     });
   }, [images, frameType]);
 
+  const handleOrder = () => {
+    if (!images.length) {
+      // Show popup
+      return;
+    }
+    console.log(images);
+
+    setLoading(true);
+    apiPost(
+      apiUrls.orders(),
+      {
+        "files.image": images.map((i) => i.croppedUrl || i.url),
+        data: JSON.stringify({
+          fullname: "Khanh Nguyen Test",
+          email: "hello@pixfr.com",
+          address: "Ha Noi",
+        }),
+      },
+      () => {
+        setLoading(false);
+      }
+    );
+  };
+
+  const btnOrder = (
+    <Button className="btnOrder" variant="contained" size="large" fullWidth onClick={handleOrder} loading={loading}>
+      Đặt hàng
+    </Button>
+  );
+
   return (
-    <Layout title="Chọn ảnh" grayBackground>
+    <Layout
+      title="Chọn ảnh"
+      grayBackground
+      pickFrames={{ selected: frameType, setSelected: setFrameType }}
+      mobileBtnBottom={btnOrder}
+    >
       <div className="PickPhotos">
         <ModalCrop
           {...modalCrop}
           onClose={() => setModalCrop({ ...modalCrop, show: false })}
-          onConfirm={(url, zoom, crop) => {
+          onConfirm={(url, zoom, crop, croppedFile) => {
             setImages((images) => {
               const newImages = [...images];
               const image = newImages.find((i) => i.id === modalCrop.id);
@@ -85,6 +126,7 @@ const PickPhotos: NextPage = () => {
                 image.crop = crop;
                 image.zoom = zoom;
                 image.croppedUrl = url;
+                image.croppedFile = croppedFile;
               }
               return newImages;
             });
@@ -92,9 +134,7 @@ const PickPhotos: NextPage = () => {
         />
         <div className="menu">
           <PickFrames selected={frameType} setSelected={setFrameType} />
-          <Button variant="contained" size="large" fullWidth style={{ borderRadius: 8, marginTop: 24 }}>
-            Đặt hàng
-          </Button>
+          {btnOrder}
         </div>
 
         <div className="main">

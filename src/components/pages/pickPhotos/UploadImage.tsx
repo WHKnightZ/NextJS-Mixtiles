@@ -1,5 +1,5 @@
 import { CircularProgress } from "@mui/material";
-import { Button } from "components";
+import Button from "../../button/Button";
 import React from "react";
 
 import frameBlack from "assets/images/frame_black.png";

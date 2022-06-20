@@ -1,13 +1,11 @@
 import axios, { Method, AxiosRequestConfig } from "axios";
 import { API_URL } from "../configs/apis";
-// import { configureStore } from "store";
-// import { CREATE_TOAST } from "store/actionTypes";
 import { ObjectType } from "types";
-import { SUCCESS } from "configs/constants";
+import { isArray } from "lodash";
 
 axios.defaults.baseURL = API_URL;
 
-type CallbackType = (data: { code: number; id: string; status: boolean; text: string; data: any; error?: any }) => void;
+type CallbackType = (data: { status: boolean; text: string; data: any }) => void;
 
 /**
  * Config request common
@@ -25,33 +23,38 @@ const request = async (
   options: ObjectType = {}
 ) => {
   // config params
-  // const accessToken = configureStore.getState().auth.access_token;
-  // const headers = { Authorization: `Bearer ${accessToken}` };
-  const headers = {};
+  const accessToken =
+    "f0526a9f9b3576b7da0c17ec3890753984585890cef058e12dfb61ddd5bc5c704935328b0ec7da58d8092b889034eb7fc4c91d0c11638c281c604949ac556fcbb81c42b537707f8c5afc31164dee11954d484b583b1f17fa84d0a9adbcede3ec1372e48d3b3cd136931767e6784362c45ed1159912417bcb18d6bee97a2048c0";
+  const headers = { Authorization: `bearer ${accessToken}` };
 
   const { showToast, ...optionsRest } = options;
 
   const defaultParams = { headers, method, url, ...optionsRest };
-  const paramConfigs: AxiosRequestConfig =
-    method === "get" ? { ...defaultParams, params: data } : { ...defaultParams, data: data };
+  const paramConfigs: AxiosRequestConfig = { ...defaultParams, params: data };
+
+  if (method !== "get" && method !== "delete") {
+    delete paramConfigs.params;
+    const formData = new FormData();
+    for (const key in data) {
+      const value = data[key];
+      if (isArray(value)) {
+        value.forEach((i) => formData.append(key, i));
+      } else formData.append(key, value);
+    }
+
+    paramConfigs.data = formData;
+  }
 
   return new Promise<any>((resolve) => {
     axios(paramConfigs).then((res) => {
       let { data = {} as any } = res;
-      const { code = 500, message = "", id = "", status = false } = data;
+      const error = data.error;
+      const message = (error || {}).message;
       data = {
-        code,
-        id,
-        status: status === SUCCESS,
-        text: message,
-        data: data.data,
+        status: !error,
+        text: message || "Có lỗi xảy ra, vui lòng thử lại sau!",
+        data: data,
       };
-      // showToast &&
-      //   configureStore.dispatch({
-      //     type: CREATE_TOAST,
-      //     payload: { type: status, message: { content: message } },
-      //   });
-
       resolve(data);
       callback(data);
     });

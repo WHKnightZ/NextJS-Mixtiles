@@ -2,14 +2,22 @@
   &.small {
     display: flex;
     margin-top: 12px;
+    overflow-x: scroll;
 
     .PickFrame {
-      width: 80px;
+      width: 72px;
       flex-direction: column;
       text-align: center;
+      font-size: 13px;
 
       img {
         margin-right: 0;
+        width: 56px;
+        height: 56px;
+      }
+
+      div {
+        margin-top: 6px;
       }
     }
   }

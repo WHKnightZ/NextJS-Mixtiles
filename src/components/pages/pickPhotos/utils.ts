@@ -1,28 +1,20 @@
+import { apiUrls } from "configs/apis";
 import APIRequest from "services/api";
-import { createFileName, randomId } from "utils";
+import { randomId } from "utils";
 import { FULL_SIZE } from "./constants";
 
 export const uploadImage = (file: any, onSuccess: (url: string) => void) =>
-  APIRequest.get("/api/v1/upload", { prefix: "mixtiles", file_name: createFileName(file.name) }, ({ status, data }) => {
-    if (status) {
-      const { file_link, upload_link } = data;
-      const myHeaders = new Headers();
-      myHeaders.append("x-amz-acl", "public-read");
-      // if (contentType) myHeaders.append('content-type', contentType)
-
-      const requestOptions: any = {
-        method: "PUT",
-        headers: myHeaders,
-        body: file,
-        redirect: "follow",
-      };
-
-      fetch(upload_link, requestOptions)
-        .then((response) => response.text())
-        .then(() => onSuccess(file_link || ""))
-        .catch((error) => console.log("error", error));
+  APIRequest.post(
+    apiUrls.upload(),
+    {
+      files: file,
+    },
+    ({ status, data }) => {
+      if (status) {
+        onSuccess(data[0].url);
+      }
     }
-  });
+  );
 
 const createImage = (url: string) =>
   new Promise((resolve) => {

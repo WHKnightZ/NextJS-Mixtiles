@@ -10,28 +10,6 @@ export const isMobile = () =>
   /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
 /**
- * Capitalize first letter in word
- * @param string
- * @returns
- */
-export const capitalizeFirstLetter = (string: string) => {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-};
-
-/**
- * Capitalize each first letter of word in sentence
- * @param string
- * @returns
- */
-export const capitalizeWords = (string: string) => {
-  if (!string) return "";
-  return string
-    .split(" ")
-    .map((x) => x.charAt(0).toUpperCase() + x.slice(1))
-    .reduce((x, y) => x + " " + y);
-};
-
-/**
  * Get user from local storage
  */
 export const getUserLS = () => {
