@@ -1,9 +1,9 @@
 "use strict";
-exports.id = 990;
-exports.ids = [990];
+exports.id = 845;
+exports.ids = [845];
 exports.modules = {
 
-/***/ 9990:
+/***/ 7845:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 
@@ -11,14 +11,13 @@ exports.modules = {
 __webpack_require__.d(__webpack_exports__, {
   "zx": () => (/* reexport */ button_Button),
   "Ar": () => (/* reexport */ layout_Layout),
-  "u_": () => (/* reexport */ modal_Modal),
   "Yh": () => (/* reexport */ pickPhotos_ModalCrop),
   "s9": () => (/* reexport */ pickFrames_PickFrames),
   "zv": () => (/* reexport */ pickPhotos_UploadImage),
   "Ix": () => (/* reexport */ uploadImage)
 });
 
-// UNUSED EXPORTS: Scrollbar, getCroppedImg
+// UNUSED EXPORTS: Modal, Scrollbar, getCroppedImg
 
 // EXTERNAL MODULE: external "react/jsx-runtime"
 var jsx_runtime_ = __webpack_require__(997);
@@ -304,26 +303,40 @@ const AccountPopover = ()=>{
 
 
 
-const Navbar = ()=>{
+
+const Navbar = ({ pickFrames  })=>{
     return /*#__PURE__*/ jsx_runtime_.jsx("div", {
-        className: "Navbar",
+        className: `Navbar${pickFrames ? " hasPickFrames" : ""}`,
         children: /*#__PURE__*/ (0,jsx_runtime_.jsxs)("div", {
-            className: "Navbar-inside",
+            className: "Navbar-wrapper",
             children: [
-                /*#__PURE__*/ jsx_runtime_.jsx(button_Button, {
-                    className: "Navbar-menu",
-                    children: /*#__PURE__*/ jsx_runtime_.jsx("i", {
-                        className: "icon-bars"
-                    })
+                /*#__PURE__*/ (0,jsx_runtime_.jsxs)("div", {
+                    className: "Navbar-inside",
+                    children: [
+                        /*#__PURE__*/ jsx_runtime_.jsx(button_Button, {
+                            className: "Navbar-menu",
+                            children: /*#__PURE__*/ jsx_runtime_.jsx("i", {
+                                className: "icon-bars"
+                            })
+                        }),
+                        /*#__PURE__*/ jsx_runtime_.jsx("div", {
+                            className: "Navbar-logo",
+                            children: /*#__PURE__*/ jsx_runtime_.jsx(next_link["default"], {
+                                href: "/",
+                                children: "Mixtiles"
+                            })
+                        }),
+                        /*#__PURE__*/ jsx_runtime_.jsx(layout_AccountPopover, {})
+                    ]
                 }),
-                /*#__PURE__*/ jsx_runtime_.jsx("div", {
-                    className: "Navbar-logo",
-                    children: /*#__PURE__*/ jsx_runtime_.jsx(next_link["default"], {
-                        href: "/",
-                        children: "Mixtiles"
+                !!pickFrames && /*#__PURE__*/ jsx_runtime_.jsx("div", {
+                    className: "Navbar-pickFrames",
+                    children: /*#__PURE__*/ jsx_runtime_.jsx(pickFrames_PickFrames, {
+                        selected: pickFrames.selected,
+                        setSelected: pickFrames.setSelected,
+                        small: true
                     })
-                }),
-                /*#__PURE__*/ jsx_runtime_.jsx(layout_AccountPopover, {})
+                })
             ]
         })
     });
@@ -336,7 +349,7 @@ const Navbar = ()=>{
 
 
 
-const Layout = ({ title , description , grayBackground , children  })=>{
+const Layout = ({ title , description , grayBackground , children , pickFrames , mobileBtnBottom  })=>{
     return /*#__PURE__*/ (0,jsx_runtime_.jsxs)(jsx_runtime_.Fragment, {
         children: [
             /*#__PURE__*/ (0,jsx_runtime_.jsxs)((head_default()), {
@@ -360,7 +373,9 @@ const Layout = ({ title , description , grayBackground , children  })=>{
             /*#__PURE__*/ (0,jsx_runtime_.jsxs)("div", {
                 className: "Layout",
                 children: [
-                    /*#__PURE__*/ jsx_runtime_.jsx(layout_Navbar, {}),
+                    /*#__PURE__*/ jsx_runtime_.jsx(layout_Navbar, {
+                        pickFrames: pickFrames
+                    }),
                     /*#__PURE__*/ jsx_runtime_.jsx("div", {
                         className: "Main",
                         children: /*#__PURE__*/ jsx_runtime_.jsx("div", {
@@ -369,6 +384,10 @@ const Layout = ({ title , description , grayBackground , children  })=>{
                                 children: children
                             })
                         })
+                    }),
+                    !!mobileBtnBottom && /*#__PURE__*/ jsx_runtime_.jsx("div", {
+                        className: "MobileBtnButton",
+                        children: mobileBtnBottom
                     })
                 ]
             })
@@ -380,126 +399,10 @@ const Layout = ({ title , description , grayBackground , children  })=>{
 // EXTERNAL MODULE: external "react-easy-crop"
 var external_react_easy_crop_ = __webpack_require__(6335);
 var external_react_easy_crop_default = /*#__PURE__*/__webpack_require__.n(external_react_easy_crop_);
-// EXTERNAL MODULE: external "axios"
-var external_axios_ = __webpack_require__(2167);
-var external_axios_default = /*#__PURE__*/__webpack_require__.n(external_axios_);
-;// CONCATENATED MODULE: ./src/configs/apis.ts
-// export const { REACT_APP_API_URL: API_URL } = process.env;
-const API_URL = "https://dvkn.link/";
-const apiUrls = {};
-
-;// CONCATENATED MODULE: ./src/services/api.ts
-
-
-
-(external_axios_default()).defaults.baseURL = API_URL;
-/**
- * Config request common
- *
- * @param {String} method Request method
- * @param {String} url Request URL
- * @param {Object} data Request params
- * @param {Object} options Config options
- */ const request = async (method, url, data1 = {}, callback = ()=>{}, options = {})=>{
-    // config params
-    // const accessToken = configureStore.getState().auth.access_token;
-    // const headers = { Authorization: `Bearer ${accessToken}` };
-    const headers = {};
-    const { showToast , ...optionsRest } = options;
-    const defaultParams = {
-        headers,
-        method,
-        url,
-        ...optionsRest
-    };
-    const paramConfigs = method === "get" ? {
-        ...defaultParams,
-        params: data1
-    } : {
-        ...defaultParams,
-        data: data1
-    };
-    return new Promise((resolve)=>{
-        external_axios_default()(paramConfigs).then((res)=>{
-            let { data ={}  } = res;
-            const { code =500 , message ="" , id ="" , status =false  } = data;
-            data = {
-                code,
-                id,
-                status: status === constants/* SUCCESS */.MR,
-                text: message,
-                data: data.data
-            };
-            // showToast &&
-            //   configureStore.dispatch({
-            //     type: CREATE_TOAST,
-            //     payload: { type: status, message: { content: message } },
-            //   });
-            resolve(data);
-            callback(data);
-        });
-    });
-};
-/**
- * Request process callback with method GET
- *
- * @param {String} url Request URL
- * @param {Object} params Request params
- * @param {Function} callback callback
- */ const apiGet = (url = "", params = {}, callback, showToast)=>{
-    return request("get", url, params, callback, {
-        showToast
-    });
-};
-/**
- * Request process callback with method POST
- *
- * @param {String} url Request URL
- * @param {Object} params Request params
- * @param {Function} callback callback
- */ const apiPost = (url = "", params = {}, callback, showToast)=>{
-    return request("post", url, params, callback, {
-        showToast
-    });
-};
-/**
- * Request process callback with method PUT
- *
- * @param {String} url Request URL
- * @param {Object} params Request params
- * @param {Function} callback callback
- */ const apiPut = (url = "", params = {}, callback, showToast)=>{
-    return request("put", url, params, callback, {
-        showToast
-    });
-};
-/**
- * Request process callback with method DELETE
- *
- * @param {String} url Request URL
- * @param {Object} params Request params
- * @param {Function} callback callback
- */ const apiDelete = (url = "", params = {}, callback, showToast)=>{
-    return request("delete", url, params, callback, {
-        showToast
-    });
-};
-const useApis = ()=>({
-        apiGet,
-        apiPost,
-        apiPut,
-        apiDelete,
-        request
-    })
-;
-/* harmony default export */ const api = ({
-    get: apiGet,
-    post: apiPost,
-    put: apiPut,
-    delete: apiDelete,
-    request
-});
-
+// EXTERNAL MODULE: ./src/configs/apis.ts
+var apis = __webpack_require__(1071);
+// EXTERNAL MODULE: ./src/services/api.ts
+var api = __webpack_require__(8467);
 // EXTERNAL MODULE: ./src/utils/index.ts + 1 modules
 var utils = __webpack_require__(3827);
 ;// CONCATENATED MODULE: ./src/components/pages/pickPhotos/constants.ts
@@ -510,25 +413,12 @@ const FULL_SIZE = 600;
 
 
 
-const uploadImage = (file, onSuccess)=>api.get("/api/v1/upload", {
-        prefix: "mixtiles",
-        file_name: (0,utils/* createFileName */.cX)(file.name)
+
+const uploadImage = (file, onSuccess)=>api/* default.post */.Z.post(apis/* apiUrls.upload */.m.upload(), {
+        files: file
     }, ({ status , data  })=>{
         if (status) {
-            const { file_link , upload_link  } = data;
-            const myHeaders = new Headers();
-            myHeaders.append("x-amz-acl", "public-read");
-            // if (contentType) myHeaders.append('content-type', contentType)
-            const requestOptions = {
-                method: "PUT",
-                headers: myHeaders,
-                body: file,
-                redirect: "follow"
-            };
-            fetch(upload_link, requestOptions).then((response)=>response.text()
-            ).then(()=>onSuccess(file_link || "")
-            ).catch((error)=>console.log("error", error)
-            );
+            onSuccess(data[0].url);
         }
     })
 ;
@@ -569,6 +459,7 @@ const getCroppedImg = async (imageSrc, crop)=>{
 
 
 
+
 const ModalCrop = ({ show , url: url1 , crop: defaultCrop = {
     x: 0,
     y: 0
@@ -592,7 +483,7 @@ const ModalCrop = ({ show , url: url1 , crop: defaultCrop = {
         const file = await getCroppedImg(url1, ref.current.getCropData().croppedAreaPixels);
         uploadImage(file, (url)=>{
             setLoading(false);
-            onConfirm(url, zoom, crop);
+            onConfirm(url, zoom, crop, file);
             onClose();
         });
     };
@@ -824,6 +715,23 @@ const UploadImage = ({ first , url , loading , onClick , onCrop , onRemove , fra
 
 /***/ }),
 
+/***/ 1071:
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "T": () => (/* binding */ API_URL),
+/* harmony export */   "m": () => (/* binding */ apiUrls)
+/* harmony export */ });
+const API_URL = `${"http://34.200.245.150:1337"}/api/`;
+const apiUrls = {
+    upload: ()=>"upload"
+    ,
+    orders: ()=>"orders"
+};
+
+
+/***/ }),
+
 /***/ 9652:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -831,12 +739,10 @@ const UploadImage = ({ first , url , loading , onClick , onCrop , onRemove , fra
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
   "tU": () => (/* binding */ DEFAULT_AVATAR),
-  "mL": () => (/* binding */ LS_PHOTOS),
-  "Lk": () => (/* binding */ MAX_FILENAME_LENGTH),
-  "MR": () => (/* binding */ SUCCESS)
+  "mL": () => (/* binding */ LS_PHOTOS)
 });
 
-// UNUSED EXPORTS: ERROR, LANGUAGES, LS_LANG, MAX_ATTACHMENT_FILES
+// UNUSED EXPORTS: ERROR, LANGUAGES, LS_LANG, MAX_ATTACHMENT_FILES, MAX_FILENAME_LENGTH, SUCCESS
 
 ;// CONCATENATED MODULE: ./src/assets/images/default_avatar.png
 /* harmony default export */ const default_avatar = ({"src":"/_next/static/media/default_avatar.2f9d89ab.png","height":256,"width":256,"blurDataURL":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAA6UlEQVR42mMAgcDJv6QCpvxbHTjj//sgIA6Y/Hc1SAwsGTT5p5T/5H/3gyb9+e9Zef6/S9mZ//6T/v4PAImBFPlN/L0mcNr//yzRG34C1f8HYcOcQz/9gWL+k36vARr/9537pP//J7TP+9+UG/P/9KrG/xvnL/9v2Pv/f8iUv+8YgMRbIyDn+r5D//9eng7G1/Ye+m/c9/8/SI4hbMqf1TYT/v9vX/Lh5++Lc//9vjjnXweQbQ0UA8qtYvCf+k8CyLjLUPT//7GdD8AYxAaJgeQYQMC1+Z+ESeaf1fr5/9+AMIjt2vwXLAkAscac9lhMTgQAAAAASUVORK5CYII="});
@@ -857,19 +763,148 @@ const MAX_FILENAME_LENGTH = 40;
 
 /***/ }),
 
+/***/ 8467:
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "T": () => (/* binding */ useApis),
+/* harmony export */   "Z": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2167);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _configs_apis__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1071);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6517);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+(axios__WEBPACK_IMPORTED_MODULE_0___default().defaults.baseURL) = _configs_apis__WEBPACK_IMPORTED_MODULE_1__/* .API_URL */ .T;
+/**
+ * Config request common
+ *
+ * @param {String} method Request method
+ * @param {String} url Request URL
+ * @param {Object} data Request params
+ * @param {Object} options Config options
+ */ const request = async (method, url, data1 = {}, callback = ()=>{}, options = {})=>{
+    // config params
+    const accessToken = "f0526a9f9b3576b7da0c17ec3890753984585890cef058e12dfb61ddd5bc5c704935328b0ec7da58d8092b889034eb7fc4c91d0c11638c281c604949ac556fcbb81c42b537707f8c5afc31164dee11954d484b583b1f17fa84d0a9adbcede3ec1372e48d3b3cd136931767e6784362c45ed1159912417bcb18d6bee97a2048c0";
+    const headers = {
+        Authorization: `bearer ${accessToken}`
+    };
+    const { showToast , ...optionsRest } = options;
+    const defaultParams = {
+        headers,
+        method,
+        url,
+        ...optionsRest
+    };
+    const paramConfigs = {
+        ...defaultParams,
+        params: data1
+    };
+    if (method !== "get" && method !== "delete") {
+        delete paramConfigs.params;
+        const formData = new FormData();
+        for(const key in data1){
+            const value = data1[key];
+            if ((0,lodash__WEBPACK_IMPORTED_MODULE_2__.isArray)(value)) {
+                value.forEach((i)=>formData.append(key, i)
+                );
+            } else formData.append(key, value);
+        }
+        paramConfigs.data = formData;
+    }
+    return new Promise((resolve)=>{
+        axios__WEBPACK_IMPORTED_MODULE_0___default()(paramConfigs).then((res)=>{
+            let { data ={}  } = res;
+            const error = data.error;
+            const message = (error || {}).message;
+            data = {
+                status: !error,
+                text: message || "C\xf3 l\u1ED7i x\u1EA3y ra, vui l\xf2ng th\u1EED l\u1EA1i sau!",
+                data: data
+            };
+            resolve(data);
+            callback(data);
+        });
+    });
+};
+/**
+ * Request process callback with method GET
+ *
+ * @param {String} url Request URL
+ * @param {Object} params Request params
+ * @param {Function} callback callback
+ */ const apiGet = (url = "", params = {}, callback, showToast)=>{
+    return request("get", url, params, callback, {
+        showToast
+    });
+};
+/**
+ * Request process callback with method POST
+ *
+ * @param {String} url Request URL
+ * @param {Object} params Request params
+ * @param {Function} callback callback
+ */ const apiPost = (url = "", params = {}, callback, showToast)=>{
+    return request("post", url, params, callback, {
+        showToast
+    });
+};
+/**
+ * Request process callback with method PUT
+ *
+ * @param {String} url Request URL
+ * @param {Object} params Request params
+ * @param {Function} callback callback
+ */ const apiPut = (url = "", params = {}, callback, showToast)=>{
+    return request("put", url, params, callback, {
+        showToast
+    });
+};
+/**
+ * Request process callback with method DELETE
+ *
+ * @param {String} url Request URL
+ * @param {Object} params Request params
+ * @param {Function} callback callback
+ */ const apiDelete = (url = "", params = {}, callback, showToast)=>{
+    return request("delete", url, params, callback, {
+        showToast
+    });
+};
+const useApis = ()=>({
+        apiGet,
+        apiPost,
+        apiPut,
+        apiDelete,
+        request
+    })
+;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+    get: apiGet,
+    post: apiPost,
+    put: apiPut,
+    delete: apiDelete,
+    request
+});
+
+
+/***/ }),
+
 /***/ 3827:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "cX": () => (/* reexport */ createFileName),
   "v$": () => (/* reexport */ getLsPhotos),
   "kb": () => (/* reexport */ randomId),
   "T8": () => (/* reexport */ saveLsPhotos)
 });
 
-// UNUSED EXPORTS: capitalizeFirstLetter, capitalizeWords, convertToId, drawRoundedImage, formatFilename, getUserLS, isMobile, removeAccents, removeUserLS, resizeImage, trimFileName, updateUserLS
+// UNUSED EXPORTS: convertToId, createFileName, drawRoundedImage, formatFilename, getUserLS, isMobile, removeAccents, removeUserLS, resizeImage, trimFileName, updateUserLS
 
 // EXTERNAL MODULE: ./src/configs/constants.ts + 1 modules
 var constants = __webpack_require__(9652);
@@ -881,23 +916,6 @@ var constants = __webpack_require__(9652);
  * @return Boolean
  */ const isMobile = ()=>/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 ;
-/**
- * Capitalize first letter in word
- * @param string
- * @returns
- */ const capitalizeFirstLetter = (string)=>{
-    return string.charAt(0).toUpperCase() + string.slice(1);
-};
-/**
- * Capitalize each first letter of word in sentence
- * @param string
- * @returns
- */ const capitalizeWords = (string)=>{
-    if (!string) return "";
-    return string.split(" ").map((x)=>x.charAt(0).toUpperCase() + x.slice(1)
-    ).reduce((x, y)=>x + " " + y
-    );
-};
 /**
  * Get user from local storage
  */ const getUserLS = ()=>{
@@ -955,11 +973,11 @@ const formatFilename = (name)=>{
 const trimFileName = (fileName = "")=>{
     // Normalize NFC on safari => fix bug germany character
     fileName = formatFilename(fileName);
-    if (fileName.length > constants/* MAX_FILENAME_LENGTH */.Lk) {
+    if (fileName.length > MAX_FILENAME_LENGTH) {
         const indexExtension = fileName.lastIndexOf(".");
         // if extension length > 5 => only take 4 characters
         const ext = indexExtension > -1 ? fileName.substr(indexExtension).substr(0, 5) : "";
-        const newName = fileName.substr(0, constants/* MAX_FILENAME_LENGTH */.Lk - ext.length);
+        const newName = fileName.substr(0, MAX_FILENAME_LENGTH - ext.length);
         fileName = newName + ext;
     }
     return fileName;

@@ -78,8 +78,11 @@ const theme = (0,material_.createTheme)({
 
 
 
+// import { useRouter } from "next/router";
 function MyApp({ Component , pageProps  }) {
     const AnyComponent = Component;
+    // const router = useRouter();
+    // console.log(router);
     return /*#__PURE__*/ jsx_runtime_.jsx(material_.ThemeProvider, {
         theme: theme,
         children: /*#__PURE__*/ jsx_runtime_.jsx(AnyComponent, {
