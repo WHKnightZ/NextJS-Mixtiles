@@ -1,4 +1,6 @@
-// export const { REACT_APP_API_URL: API_URL } = process.env;
-export const API_URL = "https://dvkn.link/";
+export const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/`;
 
-export const apiUrls = {};
+export const apiUrls = {
+  upload: () => "upload",
+  orders: () => "orders",
+};

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Button, Modal } from "components";
+import Button from "../../button/Button";
+import Modal from "../../modal/Modal";
 import { DialogActions, DialogContent, Slider } from "@mui/material";
 import Cropper from "react-easy-crop";
 import { getCroppedImg, uploadImage } from "./utils";
@@ -15,7 +16,7 @@ interface Props {
   minZoom: number;
   maxZoom: number;
   onClose: any;
-  onConfirm: (url: string, zoom: number, crop: { x: number; y: number }) => void;
+  onConfirm: (url: string, zoom: number, crop: { x: number; y: number }, croppedFile: any) => void;
 }
 
 const ModalCrop: React.FC<Props> = ({
@@ -50,7 +51,7 @@ const ModalCrop: React.FC<Props> = ({
 
     uploadImage(file, (url) => {
       setLoading(false);
-      onConfirm(url, zoom, crop);
+      onConfirm(url, zoom, crop, file);
       onClose();
     });
   };
