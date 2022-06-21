@@ -1,9 +1,9 @@
-import { Button, Layout, ModalCrop, PickFrames, UploadImage, uploadImage } from "components";
+import { Button, Layout, ModalCrop, PickFrames, UploadImage } from "components";
 import { apiUrls } from "configs/apis";
 import type { NextPage } from "next";
-import { useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useApis } from "services/api";
-import { getLsPhotos, randomId, saveLsPhotos } from "utils";
+import { getFileFromImage, getLsPhotos, randomId, saveLsPhotos } from "utils";
 
 const PickPhotos: NextPage = () => {
   const inputRef = useRef<any>();
@@ -20,8 +20,6 @@ const PickPhotos: NextPage = () => {
       widthGreater: boolean;
       croppedUrl?: string;
       crop?: { x: number; y: number };
-      file: any;
-      croppedFile?: any;
     }[]
   >([]);
   const [modalCrop, setModalCrop] = useState<any>({ show: false, url: "" });
@@ -34,7 +32,7 @@ const PickPhotos: NextPage = () => {
     setFrameType(defaultFrameType || "blackBorder");
   }, []);
 
-  const handleUploadFile = (e: any) => {
+  const handleUploadFile = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -44,27 +42,31 @@ const PickPhotos: NextPage = () => {
     image.onload = () => {
       // Width greater to determine width or height must be zoomed in
       const widthGreater = image.width > image.height;
-      const index = images.length;
       let zoom = image.width / image.height;
       if (!widthGreater) zoom = 1 / zoom;
       const maxZoom = zoom * 2.4;
 
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = image.width;
+      canvas.height = image.height;
+      ctx?.drawImage(image, 0, 0);
+
       setImages((images) => [
         ...images,
-        { id: randomId(), url, loading: true, widthGreater, zoom, minZoom: zoom, maxZoom, file },
+        {
+          id: randomId(),
+          url: canvas.toDataURL("image/jpeg"),
+          loading: false,
+          widthGreater,
+          zoom,
+          minZoom: zoom,
+          maxZoom,
+        },
       ]);
-
-      uploadImage(file, (url) => {
-        setImages((images) => {
-          const newImages = [...images];
-          newImages[index].loading = false;
-          newImages[index].url = url;
-          return newImages;
-        });
-      });
     };
 
-    e.target.value = null;
+    e.target.value = null as any;
   };
 
   const inputClick = () => inputRef.current.click();
@@ -77,7 +79,7 @@ const PickPhotos: NextPage = () => {
     });
   }, [images, frameType]);
 
-  const handleOrder = () => {
+  const handleOrder = async () => {
     if (!images.length) {
       // Show popup
       return;
@@ -85,13 +87,16 @@ const PickPhotos: NextPage = () => {
     console.log(images);
 
     setLoading(true);
+
+    const files = await Promise.all(images.map((i) => getFileFromImage(i.croppedUrl || i.url)));
+
     apiPost(
       apiUrls.orders(),
       {
-        "files.image": images.map((i) => i.croppedUrl || i.url),
+        "files.image": files,
         data: JSON.stringify({
-          fullname: "Khanh Nguyen Test",
-          email: "hello@pixfr.com",
+          fullname: "Nguyễn Chaos Khánh",
+          email: "nguyenkhanhsl1997@gmail.com",
           address: "Ha Noi",
         }),
       },
@@ -118,7 +123,7 @@ const PickPhotos: NextPage = () => {
         <ModalCrop
           {...modalCrop}
           onClose={() => setModalCrop({ ...modalCrop, show: false })}
-          onConfirm={(url, zoom, crop, croppedFile) => {
+          onConfirm={(url, zoom, crop) => {
             setImages((images) => {
               const newImages = [...images];
               const image = newImages.find((i) => i.id === modalCrop.id);
@@ -126,7 +131,6 @@ const PickPhotos: NextPage = () => {
                 image.crop = crop;
                 image.zoom = zoom;
                 image.croppedUrl = url;
-                image.croppedFile = croppedFile;
               }
               return newImages;
             });

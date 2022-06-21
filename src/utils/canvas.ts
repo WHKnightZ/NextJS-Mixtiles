@@ -1,3 +1,6 @@
+import { FULL_SIZE } from "configs/constants";
+import { randomId } from "./common";
+
 export const drawRoundedImage = (
   ctx: CanvasRenderingContext2D,
   image: HTMLImageElement,
@@ -51,4 +54,44 @@ export const resizeImage = (dataUrl: any, newWidth: number, newHeight: number, c
       0.85
     );
   };
+};
+
+const createImage = (url: string) =>
+  new Promise((resolve) => {
+    const image = new Image();
+    image.setAttribute("crossorigin", "anonymous");
+    image.onload = () => resolve(image);
+    image.src = url;
+  });
+
+export const getCroppedUrl = async (imageSrc: any, crop: any) => {
+  const image = (await createImage(imageSrc)) as HTMLImageElement;
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+
+  canvas.width = FULL_SIZE;
+  canvas.height = FULL_SIZE;
+
+  ctx?.drawImage(image, crop.x, crop.y, crop.width, crop.height, 0, 0, FULL_SIZE, FULL_SIZE);
+
+  return canvas.toDataURL("image/jpeg");
+};
+
+export const getFileFromImage = async (imageSrc: any) => {
+  const image = (await createImage(imageSrc)) as HTMLImageElement;
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+
+  canvas.width = image.width;
+  canvas.height = image.height;
+
+  ctx?.drawImage(image, 0, 0, image.width, image.height);
+
+  return new Promise((resolve) => {
+    canvas.toBlob((blob) => {
+      const file = new File([blob as any], `${randomId()}.jpg`, { type: "image/jpg" });
+
+      resolve(file);
+    }, "image/jpeg");
+  });
 };

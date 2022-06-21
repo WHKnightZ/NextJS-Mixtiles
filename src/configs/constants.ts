@@ -15,3 +15,6 @@ export const ERROR = false;
 
 export const MAX_ATTACHMENT_FILES = 10;
 export const MAX_FILENAME_LENGTH = 40;
+
+export const CANVAS_SIZE = 280;
+export const FULL_SIZE = 600;
