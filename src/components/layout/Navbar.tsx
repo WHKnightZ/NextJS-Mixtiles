@@ -3,6 +3,7 @@ import PickFrames from "../pickFrames/PickFrames";
 import Link from "next/link";
 import React from "react";
 import AccountPopover from "./AccountPopover";
+import { createToast } from "../toast/createToast";
 
 interface Props {
   pickFrames?: {
@@ -16,7 +17,7 @@ const Navbar: React.FC<Props> = ({ pickFrames }) => {
     <div className={`Navbar${pickFrames ? " hasPickFrames" : ""}`}>
       <div className="Navbar-wrapper">
         <div className="Navbar-inside">
-          <Button className="Navbar-menu">
+          <Button className="Navbar-menu" onClick={() => createToast({ type: Math.random() > 0.5 })}>
             <i className="icon-bars" />
           </Button>
           <div className="Navbar-logo">
