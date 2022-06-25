@@ -1,11 +1,17 @@
 import axios, { Method, AxiosRequestConfig } from "axios";
 import { API_URL } from "../configs/apis";
-import { ObjectType } from "types";
 import { isArray } from "lodash";
+import { createToast } from "components/toast/createToast";
 
 axios.defaults.baseURL = API_URL;
 
 type CallbackType = (data: { status: boolean; text: string; data: any }) => void;
+
+type OptionsType = {
+  hideToast?: boolean;
+  successMessage?: string;
+  [key: string]: any;
+};
 
 /**
  * Config request common
@@ -20,14 +26,14 @@ const request = async (
   url: string,
   data: any = {},
   callback: CallbackType = () => {},
-  options: ObjectType = {}
+  options: OptionsType = {}
 ) => {
   // config params
   const accessToken =
     "f0526a9f9b3576b7da0c17ec3890753984585890cef058e12dfb61ddd5bc5c704935328b0ec7da58d8092b889034eb7fc4c91d0c11638c281c604949ac556fcbb81c42b537707f8c5afc31164dee11954d484b583b1f17fa84d0a9adbcede3ec1372e48d3b3cd136931767e6784362c45ed1159912417bcb18d6bee97a2048c0";
   const headers = { Authorization: `bearer ${accessToken}` };
 
-  const { showToast, ...optionsRest } = options;
+  const { hideToast, successMessage, ...optionsRest } = options;
 
   const defaultParams = { headers, method, url, ...optionsRest };
   const paramConfigs: AxiosRequestConfig = { ...defaultParams, params: data };
@@ -52,9 +58,10 @@ const request = async (
       const message = (error || {}).message;
       data = {
         status: !error,
-        text: message || "Có lỗi xảy ra, vui lòng thử lại sau!",
+        text: message || !error ? successMessage || "Thành công!" : "Có lỗi xảy ra, vui lòng thử lại sau!",
         data: data,
       };
+      if (!hideToast) createToast({ type: data.status, message: { content: data.text } });
       resolve(data);
       callback(data);
     });
@@ -68,8 +75,8 @@ const request = async (
  * @param {Object} params Request params
  * @param {Function} callback callback
  */
-const apiGet = (url = "", params = {}, callback?: CallbackType, showToast?: boolean) => {
-  return request("get", url, params, callback, { showToast });
+const apiGet = (url = "", params = {}, callback?: CallbackType, options?: OptionsType) => {
+  return request("get", url, params, callback, options);
 };
 
 /**
@@ -79,8 +86,8 @@ const apiGet = (url = "", params = {}, callback?: CallbackType, showToast?: bool
  * @param {Object} params Request params
  * @param {Function} callback callback
  */
-const apiPost = (url = "", params = {}, callback?: CallbackType, showToast?: boolean) => {
-  return request("post", url, params, callback, { showToast });
+const apiPost = (url = "", params = {}, callback?: CallbackType, options?: OptionsType) => {
+  return request("post", url, params, callback, options);
 };
 
 /**
@@ -90,8 +97,8 @@ const apiPost = (url = "", params = {}, callback?: CallbackType, showToast?: boo
  * @param {Object} params Request params
  * @param {Function} callback callback
  */
-const apiPut = (url = "", params = {}, callback?: CallbackType, showToast?: boolean) => {
-  return request("put", url, params, callback, { showToast });
+const apiPut = (url = "", params = {}, callback?: CallbackType, options?: OptionsType) => {
+  return request("put", url, params, callback, options);
 };
 
 /**
@@ -101,8 +108,8 @@ const apiPut = (url = "", params = {}, callback?: CallbackType, showToast?: bool
  * @param {Object} params Request params
  * @param {Function} callback callback
  */
-const apiDelete = (url = "", params = {}, callback?: CallbackType, showToast?: boolean) => {
-  return request("delete", url, params, callback, { showToast });
+const apiDelete = (url = "", params = {}, callback?: CallbackType, options?: OptionsType) => {
+  return request("delete", url, params, callback, options);
 };
 
 export const useApis = () => ({

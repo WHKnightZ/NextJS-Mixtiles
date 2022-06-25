@@ -1,9 +1,11 @@
 import { ToastType } from "types";
 
+export const doNothing = () => {};
+
 export const listener: {
   setToasts: React.Dispatch<React.SetStateAction<ToastType[]>>;
 } = {
-  setToasts: () => {},
+  setToasts: doNothing,
 };
 
 let toastKey = 0;

@@ -17,7 +17,10 @@ const Navbar: React.FC<Props> = ({ pickFrames }) => {
     <div className={`Navbar${pickFrames ? " hasPickFrames" : ""}`}>
       <div className="Navbar-wrapper">
         <div className="Navbar-inside">
-          <Button className="Navbar-menu" onClick={() => createToast({ type: Math.random() > 0.5 })}>
+          <Button
+            className="Navbar-menu"
+            onClick={() => createToast({ type: Math.random() > 0.5, duration: Math.random() * 3000 + 2000 })}
+          >
             <i className="icon-bars" />
           </Button>
           <div className="Navbar-logo">

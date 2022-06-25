@@ -15,6 +15,7 @@ interface Props {
   onCrop?: any;
   onRemove?: any;
   widthGreater?: boolean;
+  onOpenDrawerActions?: any;
 }
 
 const mapping: any = {
@@ -50,6 +51,7 @@ const UploadImage: React.FC<Props> = ({
   onRemove,
   frameType = "",
   widthGreater,
+  onOpenDrawerActions,
 }) => {
   const { frame, imgSize } = mapping[frameType];
 
@@ -61,27 +63,30 @@ const UploadImage: React.FC<Props> = ({
   return (
     <div className={`UploadImage ${first ? "first" : "tileAppear"}`}>
       {url ? (
-        <div className="UploadImage-btn MuiButton-root no-radius" onClick={onCrop}>
-          <img className="image-frame" alt="" src={frame.src} />
-          <div className="image-wrapper">
-            <div style={{ width: imgSize, height: imgSize }}>
-              <img className={widthGreater ? "height" : "width"} alt="" src={url} />
-            </div>
-            <div className={`overlay${loading ? " loading" : ""}`}>
-              {loading ? (
-                <CircularProgress thickness={5} size={32} color="inherit" />
-              ) : (
-                <>
-                  <div className="overlay-btn btn-crop" onClick={(e) => handleClick(e, onCrop)} title="Cắt ảnh">
-                    <i className="icon-crop" />
-                  </div>
-                  <div className="overlay-btn btn-remove" onClick={(e) => handleClick(e, onRemove)} title="Xóa ảnh">
-                    <i className="icon-remove" />
-                  </div>
-                </>
-              )}
+        <div className="UploadImage-btn MuiButton-root no-radius">
+          <div className="UploadImage-desktop w-100 h-100" onClick={onCrop}>
+            <img className="image-frame" alt="" src={frame.src} />
+            <div className="image-wrapper">
+              <div style={{ width: imgSize, height: imgSize }}>
+                <img className={widthGreater ? "height" : "width"} alt="" src={url} />
+              </div>
+              <div className={`overlay${loading ? " loading" : ""}`}>
+                {loading ? (
+                  <CircularProgress thickness={5} size={32} color="inherit" />
+                ) : (
+                  <>
+                    <div className="overlay-btn btn-crop" onClick={(e) => handleClick(e, onCrop)} title="Cắt ảnh">
+                      <i className="icon-crop" />
+                    </div>
+                    <div className="overlay-btn btn-remove" onClick={(e) => handleClick(e, onRemove)} title="Xóa ảnh">
+                      <i className="icon-remove" />
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
           </div>
+          <div className="UploadImage-mobile" onClick={onOpenDrawerActions} />
         </div>
       ) : (
         <Button onClick={onClick} className="UploadImage-btn" variant="contained" color="primary">

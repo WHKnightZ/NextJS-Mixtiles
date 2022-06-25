@@ -1,3 +1,4 @@
+import { Drawer } from "@mui/material";
 import { Button, Layout, ModalCrop, PickFrames, UploadImage } from "components";
 import { apiUrls } from "configs/apis";
 import type { NextPage } from "next";
@@ -23,6 +24,7 @@ const PickPhotos: NextPage = () => {
     }[]
   >([]);
   const [modalCrop, setModalCrop] = useState<any>({ show: false, url: "" });
+  const [drawerActions, setDrawerActions] = useState<{ show: boolean; image: any }>({ show: false, image: {} });
   const [frameType, setFrameType] = useState("blackBorder");
   const [loading, setLoading] = useState(false);
 
@@ -100,9 +102,13 @@ const PickPhotos: NextPage = () => {
           address: "Ha Noi",
         }),
       },
-      () => {
+      ({ status }) => {
         setLoading(false);
-      }
+
+        if (status) {
+        }
+      },
+      { successMessage: "Đặt hàng thành công!" }
     );
   };
 
@@ -112,6 +118,11 @@ const PickPhotos: NextPage = () => {
     </Button>
   );
 
+  const handleOpenDrawerActions = (image: any) => setDrawerActions({ show: true, image });
+  const handleCloseDrawerActions = () => setDrawerActions({ ...drawerActions, show: false });
+  const handleShowModalCrop = (image: any) => setModalCrop({ show: true, ...image });
+  const handleRemove = (image: any) => setImages((images) => images.filter((i) => i.id !== image.id));
+
   return (
     <Layout
       title="Chọn ảnh"
@@ -120,6 +131,33 @@ const PickPhotos: NextPage = () => {
       mobileBtnBottom={btnOrder}
     >
       <div className="PickPhotos">
+        <Drawer
+          anchor="bottom"
+          open={drawerActions.show}
+          onBackdropClick={handleCloseDrawerActions}
+          className="PickPhotos-drawerActions"
+        >
+          <div className="PickPhotos-drawerActions__wrapper">
+            <div
+              onClick={() => {
+                handleCloseDrawerActions();
+                handleShowModalCrop(drawerActions.image);
+              }}
+            >
+              <i className="icon-crop" />
+              Cắt ảnh
+            </div>
+            <div
+              onClick={() => {
+                handleCloseDrawerActions();
+                handleRemove(drawerActions.image);
+              }}
+            >
+              <i className="icon-remove" />
+              Xóa ảnh
+            </div>
+          </div>
+        </Drawer>
         <ModalCrop
           {...modalCrop}
           onClose={() => setModalCrop({ ...modalCrop, show: false })}
@@ -151,8 +189,9 @@ const PickPhotos: NextPage = () => {
                   frameType={frameType}
                   {...image}
                   url={image.croppedUrl || image.url}
-                  onCrop={() => setModalCrop({ show: true, ...image })}
-                  onRemove={() => setImages((images) => images.filter((i) => i.id !== image.id))}
+                  onCrop={() => handleShowModalCrop(image)}
+                  onRemove={() => handleRemove(image)}
+                  onOpenDrawerActions={() => handleOpenDrawerActions(image)}
                 />
               ))}
               <UploadImage onClick={inputClick} />

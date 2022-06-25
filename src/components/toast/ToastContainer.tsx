@@ -1,14 +1,17 @@
 import React, { useCallback, useEffect, useState } from "react";
-import Toast from "./Toast";
-
-import { listener } from "./createToast";
 import { ToastType } from "types";
+import Toast from "./Toast";
+import { doNothing, listener } from "./createToast";
 
 const ToastContainter: React.FC = () => {
   const [toasts, setToasts] = useState<ToastType[]>([]);
 
   useEffect(() => {
     listener.setToasts = setToasts;
+
+    return () => {
+      listener.setToasts = doNothing;
+    };
   }, []);
 
   const removeToast = useCallback((toastKey: number = 0) => {

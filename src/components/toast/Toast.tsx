@@ -8,7 +8,7 @@ interface Props {
   onClose?: any;
 }
 
-const Toast: React.FC<Props> = ({ type = true, message, duration = 5000, onClose }) => {
+const Toast: React.FC<Props> = ({ type = true, message, duration = 3000, onClose }) => {
   const [state, setState] = useState<"" | "slide-in" | "fade-out">("");
 
   const timeout = useRef<any>();
