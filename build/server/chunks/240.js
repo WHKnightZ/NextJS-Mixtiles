@@ -1,9 +1,9 @@
 "use strict";
-exports.id = 845;
-exports.ids = [845];
+exports.id = 240;
+exports.ids = [240];
 exports.modules = {
 
-/***/ 7845:
+/***/ 6240:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 
@@ -13,11 +13,11 @@ __webpack_require__.d(__webpack_exports__, {
   "Ar": () => (/* reexport */ layout_Layout),
   "Yh": () => (/* reexport */ pickPhotos_ModalCrop),
   "s9": () => (/* reexport */ pickFrames_PickFrames),
-  "zv": () => (/* reexport */ pickPhotos_UploadImage),
-  "Ix": () => (/* reexport */ uploadImage)
+  "Ix": () => (/* reexport */ ToastContainer),
+  "zv": () => (/* reexport */ pickPhotos_UploadImage)
 });
 
-// UNUSED EXPORTS: Modal, Scrollbar, getCroppedImg
+// UNUSED EXPORTS: Modal, Scrollbar, createToast
 
 // EXTERNAL MODULE: external "react/jsx-runtime"
 var jsx_runtime_ = __webpack_require__(997);
@@ -297,7 +297,10 @@ const AccountPopover = ()=>{
 };
 /* harmony default export */ const layout_AccountPopover = (AccountPopover);
 
+// EXTERNAL MODULE: ./src/components/toast/createToast.ts
+var createToast = __webpack_require__(439);
 ;// CONCATENATED MODULE: ./src/components/layout/Navbar.tsx
+
 
 
 
@@ -315,6 +318,11 @@ const Navbar = ({ pickFrames  })=>{
                     children: [
                         /*#__PURE__*/ jsx_runtime_.jsx(button_Button, {
                             className: "Navbar-menu",
+                            onClick: ()=>(0,createToast/* createToast */.Yz)({
+                                    type: Math.random() > 0.5,
+                                    duration: Math.random() * 3000 + 2000
+                                })
+                            ,
                             children: /*#__PURE__*/ jsx_runtime_.jsx("i", {
                                 className: "icon-bars"
                             })
@@ -399,55 +407,8 @@ const Layout = ({ title , description , grayBackground , children , pickFrames ,
 // EXTERNAL MODULE: external "react-easy-crop"
 var external_react_easy_crop_ = __webpack_require__(6335);
 var external_react_easy_crop_default = /*#__PURE__*/__webpack_require__.n(external_react_easy_crop_);
-// EXTERNAL MODULE: ./src/configs/apis.ts
-var apis = __webpack_require__(1071);
-// EXTERNAL MODULE: ./src/services/api.ts
-var api = __webpack_require__(8467);
-// EXTERNAL MODULE: ./src/utils/index.ts + 1 modules
-var utils = __webpack_require__(3827);
-;// CONCATENATED MODULE: ./src/components/pages/pickPhotos/constants.ts
-const CANVAS_SIZE = 280;
-const FULL_SIZE = 600;
-
-;// CONCATENATED MODULE: ./src/components/pages/pickPhotos/utils.ts
-
-
-
-
-const uploadImage = (file, onSuccess)=>api/* default.post */.Z.post(apis/* apiUrls.upload */.m.upload(), {
-        files: file
-    }, ({ status , data  })=>{
-        if (status) {
-            onSuccess(data[0].url);
-        }
-    })
-;
-const createImage = (url)=>new Promise((resolve)=>{
-        const image = new Image();
-        image.setAttribute("crossorigin", "anonymous");
-        image.onload = ()=>resolve(image)
-        ;
-        image.src = url;
-    })
-;
-const getCroppedImg = async (imageSrc, crop)=>{
-    const image = await createImage(imageSrc);
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-    canvas.width = FULL_SIZE;
-    canvas.height = FULL_SIZE;
-    ctx === null || ctx === void 0 ? void 0 : ctx.drawImage(image, crop.x, crop.y, crop.width, crop.height, 0, 0, FULL_SIZE, FULL_SIZE);
-    return new Promise((resolve)=>{
-        canvas.toBlob((blob)=>{
-            const file = new File([
-                blob
-            ], `${(0,utils/* randomId */.kb)()}.jpg`);
-            console.log(file);
-            resolve(file);
-        }, "image/jpeg");
-    });
-};
-
+// EXTERNAL MODULE: ./src/utils/index.ts + 2 modules
+var utils = __webpack_require__(6716);
 ;// CONCATENATED MODULE: ./src/assets/images/frame_white.png
 /* harmony default export */ const frame_white = ({"src":"/_next/static/media/frame_white.87344e6b.png","height":492,"width":487,"blurDataURL":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAQAAABuBnYAAAAAbklEQVR42h3KwQ3CMBAF0bHZaGWJQqiBGqiMQiiDGqAADtxzCwrgeP1BnuPopfWsOxONjvJST5ZvfsXZCMT8PZgmXE4mOruCGY2NzBBUwug0jBgj6CZVNAr2ElYWZgp/jJLWV3pcPs9kisHefvwBZus/mEmRrGcAAAAASUVORK5CYII="});
 ;// CONCATENATED MODULE: ./src/components/pages/pickPhotos/ModalCrop.tsx
@@ -460,7 +421,7 @@ const getCroppedImg = async (imageSrc, crop)=>{
 
 
 
-const ModalCrop = ({ show , url: url1 , crop: defaultCrop = {
+const ModalCrop = ({ show , url , crop: defaultCrop = {
     x: 0,
     y: 0
 } , onClose , onConfirm , zoom: defaultZoom , minZoom , maxZoom ,  })=>{
@@ -480,12 +441,10 @@ const ModalCrop = ({ show , url: url1 , crop: defaultCrop = {
     // }, [])
     const handleConfirm = async ()=>{
         setLoading(true);
-        const file = await getCroppedImg(url1, ref.current.getCropData().croppedAreaPixels);
-        uploadImage(file, (url)=>{
-            setLoading(false);
-            onConfirm(url, zoom, crop, file);
-            onClose();
-        });
+        const croppedUrl = await (0,utils/* getCroppedUrl */.E_)(url, ref.current.getCropData().croppedAreaPixels);
+        setLoading(false);
+        onConfirm(croppedUrl, zoom, crop);
+        onClose();
     };
     return /*#__PURE__*/ (0,jsx_runtime_.jsxs)(modal_Modal, {
         title: "C\u1EAFt \u1EA3nh",
@@ -502,8 +461,8 @@ const ModalCrop = ({ show , url: url1 , crop: defaultCrop = {
                     /*#__PURE__*/ (0,jsx_runtime_.jsxs)("div", {
                         className: "image-frame-wrapper",
                         style: {
-                            width: CANVAS_SIZE + 6,
-                            height: CANVAS_SIZE + 6
+                            width: constants/* CANVAS_SIZE */.hI + 6,
+                            height: constants/* CANVAS_SIZE */.hI + 6
                         },
                         children: [
                             /*#__PURE__*/ jsx_runtime_.jsx("img", {
@@ -514,14 +473,14 @@ const ModalCrop = ({ show , url: url1 , crop: defaultCrop = {
                             /*#__PURE__*/ jsx_runtime_.jsx("div", {
                                 style: {
                                     position: "relative",
-                                    width: CANVAS_SIZE,
-                                    height: CANVAS_SIZE,
+                                    width: constants/* CANVAS_SIZE */.hI,
+                                    height: constants/* CANVAS_SIZE */.hI,
                                     margin: "0 auto",
                                     maxWidth: "100%"
                                 },
                                 children: /*#__PURE__*/ jsx_runtime_.jsx((external_react_easy_crop_default()), {
                                     ref: ref,
-                                    image: url1,
+                                    image: url,
                                     crop: crop,
                                     zoom: zoom,
                                     aspect: 1,
@@ -529,8 +488,8 @@ const ModalCrop = ({ show , url: url1 , crop: defaultCrop = {
                                     // onCropComplete={onCropComplete}
                                     onZoomChange: setZoom,
                                     cropSize: {
-                                        width: CANVAS_SIZE,
-                                        height: CANVAS_SIZE
+                                        width: constants/* CANVAS_SIZE */.hI,
+                                        height: constants/* CANVAS_SIZE */.hI
                                     },
                                     showGrid: false,
                                     minZoom: minZoom,
@@ -543,7 +502,7 @@ const ModalCrop = ({ show , url: url1 , crop: defaultCrop = {
                         style: {
                             padding: "30px 8px 8px",
                             width: "100%",
-                            maxWidth: CANVAS_SIZE,
+                            maxWidth: constants/* CANVAS_SIZE */.hI,
                             margin: "0 auto"
                         },
                         children: /*#__PURE__*/ jsx_runtime_.jsx(material_.Slider, {
@@ -611,7 +570,7 @@ const mapping = {
         imgSize: "100%"
     }
 };
-const UploadImage = ({ first , url , loading , onClick , onCrop , onRemove , frameType ="" , widthGreater ,  })=>{
+const UploadImage = ({ first , url , loading , onClick , onCrop , onRemove , frameType ="" , widthGreater , onOpenDrawerActions ,  })=>{
     const { frame , imgSize  } = mapping[frameType];
     const handleClick = (e, callback)=>{
         e.stopPropagation();
@@ -621,57 +580,66 @@ const UploadImage = ({ first , url , loading , onClick , onCrop , onRemove , fra
         className: `UploadImage ${first ? "first" : "tileAppear"}`,
         children: url ? /*#__PURE__*/ (0,jsx_runtime_.jsxs)("div", {
             className: "UploadImage-btn MuiButton-root no-radius",
-            onClick: onCrop,
             children: [
-                /*#__PURE__*/ jsx_runtime_.jsx("img", {
-                    className: "image-frame",
-                    alt: "",
-                    src: frame.src
-                }),
                 /*#__PURE__*/ (0,jsx_runtime_.jsxs)("div", {
-                    className: "image-wrapper",
+                    className: "UploadImage-desktop w-100 h-100",
+                    onClick: onCrop,
                     children: [
-                        /*#__PURE__*/ jsx_runtime_.jsx("div", {
-                            style: {
-                                width: imgSize,
-                                height: imgSize
-                            },
-                            children: /*#__PURE__*/ jsx_runtime_.jsx("img", {
-                                className: widthGreater ? "height" : "width",
-                                alt: "",
-                                src: url
-                            })
+                        /*#__PURE__*/ jsx_runtime_.jsx("img", {
+                            className: "image-frame",
+                            alt: "",
+                            src: frame.src
                         }),
-                        /*#__PURE__*/ jsx_runtime_.jsx("div", {
-                            className: `overlay${loading ? " loading" : ""}`,
-                            children: loading ? /*#__PURE__*/ jsx_runtime_.jsx(material_.CircularProgress, {
-                                thickness: 5,
-                                size: 32,
-                                color: "inherit"
-                            }) : /*#__PURE__*/ (0,jsx_runtime_.jsxs)(jsx_runtime_.Fragment, {
-                                children: [
-                                    /*#__PURE__*/ jsx_runtime_.jsx("div", {
-                                        className: "overlay-btn btn-crop",
-                                        onClick: (e)=>handleClick(e, onCrop)
-                                        ,
-                                        title: "C\u1EAFt \u1EA3nh",
-                                        children: /*#__PURE__*/ jsx_runtime_.jsx("i", {
-                                            className: "icon-crop"
-                                        })
-                                    }),
-                                    /*#__PURE__*/ jsx_runtime_.jsx("div", {
-                                        className: "overlay-btn btn-remove",
-                                        onClick: (e)=>handleClick(e, onRemove)
-                                        ,
-                                        title: "X\xf3a \u1EA3nh",
-                                        children: /*#__PURE__*/ jsx_runtime_.jsx("i", {
-                                            className: "icon-remove"
-                                        })
+                        /*#__PURE__*/ (0,jsx_runtime_.jsxs)("div", {
+                            className: "image-wrapper",
+                            children: [
+                                /*#__PURE__*/ jsx_runtime_.jsx("div", {
+                                    style: {
+                                        width: imgSize,
+                                        height: imgSize
+                                    },
+                                    children: /*#__PURE__*/ jsx_runtime_.jsx("img", {
+                                        className: widthGreater ? "height" : "width",
+                                        alt: "",
+                                        src: url
                                     })
-                                ]
-                            })
+                                }),
+                                /*#__PURE__*/ jsx_runtime_.jsx("div", {
+                                    className: `overlay${loading ? " loading" : ""}`,
+                                    children: loading ? /*#__PURE__*/ jsx_runtime_.jsx(material_.CircularProgress, {
+                                        thickness: 5,
+                                        size: 32,
+                                        color: "inherit"
+                                    }) : /*#__PURE__*/ (0,jsx_runtime_.jsxs)(jsx_runtime_.Fragment, {
+                                        children: [
+                                            /*#__PURE__*/ jsx_runtime_.jsx("div", {
+                                                className: "overlay-btn btn-crop",
+                                                onClick: (e)=>handleClick(e, onCrop)
+                                                ,
+                                                title: "C\u1EAFt \u1EA3nh",
+                                                children: /*#__PURE__*/ jsx_runtime_.jsx("i", {
+                                                    className: "icon-crop"
+                                                })
+                                            }),
+                                            /*#__PURE__*/ jsx_runtime_.jsx("div", {
+                                                className: "overlay-btn btn-remove",
+                                                onClick: (e)=>handleClick(e, onRemove)
+                                                ,
+                                                title: "X\xf3a \u1EA3nh",
+                                                children: /*#__PURE__*/ jsx_runtime_.jsx("i", {
+                                                    className: "icon-remove"
+                                                })
+                                            })
+                                        ]
+                                    })
+                                })
+                            ]
                         })
                     ]
+                }),
+                /*#__PURE__*/ jsx_runtime_.jsx("div", {
+                    className: "UploadImage-mobile",
+                    onClick: onOpenDrawerActions
                 })
             ]
         }) : /*#__PURE__*/ jsx_runtime_.jsx(button_Button, {
@@ -703,6 +671,104 @@ const UploadImage = ({ first , url , loading , onClick , onCrop , onRemove , fra
 
 
 
+;// CONCATENATED MODULE: ./src/components/toast/Toast.tsx
+
+
+const Toast = ({ type =true , message , duration =3000 , onClose  })=>{
+    var ref;
+    const { 0: state , 1: setState  } = (0,external_react_.useState)("");
+    const timeout = (0,external_react_.useRef)();
+    const ref1 = (0,external_react_.useRef)();
+    const { title ="Th\xf4ng b\xe1o" , content ="\u0110\xe2y l\xe0 th\xf4ng b\xe1o!"  } = message || {};
+    /**
+   * Close the toast
+   * @param {*} e click event
+   */ const close = (e)=>{
+        // Prevent click parent when click close
+        e === null || e === void 0 ? void 0 : e.stopPropagation();
+        setState("");
+        clearTimeout(timeout.current);
+        timeout.current = setTimeout(()=>{
+            setState("fade-out");
+            timeout.current = setTimeout(()=>{
+                onClose === null || onClose === void 0 ? void 0 : onClose();
+            }, 400);
+        }, 400);
+    };
+    (0,external_react_.useEffect)(()=>{
+        setTimeout(()=>setState("slide-in")
+        , 10);
+        if (duration) {
+            timeout.current = setTimeout(()=>{
+                close();
+            }, duration);
+        }
+        return ()=>clearTimeout(timeout.current)
+        ;
+    }, []);
+    const isFadeOut = state === "fade-out";
+    return /*#__PURE__*/ (0,jsx_runtime_.jsxs)("div", {
+        className: `toast ${state} ${type ? "success" : "error"}`,
+        ref: ref1,
+        style: {
+            maxHeight: isFadeOut ? 0 : (ref = ref1.current) === null || ref === void 0 ? void 0 : ref.scrollHeight,
+            marginBottom: isFadeOut ? 0 : 8,
+            padding: isFadeOut ? 0 : 16
+        },
+        children: [
+            /*#__PURE__*/ jsx_runtime_.jsx("i", {
+                className: `icon-${type ? "check" : "alert"}-circle`
+            }),
+            /*#__PURE__*/ (0,jsx_runtime_.jsxs)("div", {
+                children: [
+                    /*#__PURE__*/ jsx_runtime_.jsx("p", {
+                        className: "toast-title",
+                        children: title
+                    }),
+                    /*#__PURE__*/ jsx_runtime_.jsx("p", {
+                        className: "label toast-content",
+                        children: content
+                    })
+                ]
+            })
+        ]
+    });
+};
+/* harmony default export */ const toast_Toast = (Toast);
+
+;// CONCATENATED MODULE: ./src/components/toast/ToastContainer.tsx
+
+
+
+
+const ToastContainter = ()=>{
+    const { 0: toasts , 1: setToasts  } = (0,external_react_.useState)([]);
+    (0,external_react_.useEffect)(()=>{
+        createToast/* listener.setToasts */.X3.setToasts = setToasts;
+        return ()=>{
+            createToast/* listener.setToasts */.X3.setToasts = createToast/* doNothing */.cn;
+        };
+    }, []);
+    const removeToast = (0,external_react_.useCallback)((toastKey = 0)=>{
+        setToasts((prev)=>prev.filter((s)=>s.key !== toastKey
+            )
+        );
+    }, []);
+    return /*#__PURE__*/ jsx_runtime_.jsx("div", {
+        className: "toast-container",
+        children: toasts.map((toast)=>/*#__PURE__*/ jsx_runtime_.jsx(toast_Toast, {
+                onClose: ()=>removeToast(toast.key)
+                ,
+                ...toast
+            }, toast.key)
+        )
+    });
+};
+/* harmony default export */ const ToastContainer = (ToastContainter);
+
+;// CONCATENATED MODULE: ./src/components/toast/index.ts
+
+
 
 ;// CONCATENATED MODULE: ./src/components/index.tsx
 
@@ -713,20 +779,32 @@ const UploadImage = ({ first , url , loading , onClick , onCrop , onRemove , fra
 
 
 
+
 /***/ }),
 
-/***/ 1071:
+/***/ 439:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "T": () => (/* binding */ API_URL),
-/* harmony export */   "m": () => (/* binding */ apiUrls)
+/* harmony export */   "cn": () => (/* binding */ doNothing),
+/* harmony export */   "X3": () => (/* binding */ listener),
+/* harmony export */   "Yz": () => (/* binding */ createToast)
 /* harmony export */ });
-const API_URL = `${"http://34.200.245.150:1337"}/api/`;
-const apiUrls = {
-    upload: ()=>"upload"
-    ,
-    orders: ()=>"orders"
+const doNothing = ()=>{};
+const listener = {
+    setToasts: doNothing
+};
+let toastKey = 0;
+const createToast = (toast)=>{
+    toastKey += 1;
+    listener.setToasts((prev)=>[
+            ...prev,
+            {
+                ...toast,
+                key: toastKey
+            }
+        ]
+    );
 };
 
 
@@ -738,7 +816,9 @@ const apiUrls = {
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
+  "hI": () => (/* binding */ CANVAS_SIZE),
   "tU": () => (/* binding */ DEFAULT_AVATAR),
+  "lM": () => (/* binding */ FULL_SIZE),
   "mL": () => (/* binding */ LS_PHOTOS)
 });
 
@@ -759,146 +839,20 @@ const SUCCESS = true;
 const ERROR = false;
 const MAX_ATTACHMENT_FILES = 10;
 const MAX_FILENAME_LENGTH = 40;
+const CANVAS_SIZE = 280;
+const FULL_SIZE = 600;
 
 
 /***/ }),
 
-/***/ 8467:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "T": () => (/* binding */ useApis),
-/* harmony export */   "Z": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2167);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _configs_apis__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1071);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6517);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
-
-
-
-(axios__WEBPACK_IMPORTED_MODULE_0___default().defaults.baseURL) = _configs_apis__WEBPACK_IMPORTED_MODULE_1__/* .API_URL */ .T;
-/**
- * Config request common
- *
- * @param {String} method Request method
- * @param {String} url Request URL
- * @param {Object} data Request params
- * @param {Object} options Config options
- */ const request = async (method, url, data1 = {}, callback = ()=>{}, options = {})=>{
-    // config params
-    const accessToken = "f0526a9f9b3576b7da0c17ec3890753984585890cef058e12dfb61ddd5bc5c704935328b0ec7da58d8092b889034eb7fc4c91d0c11638c281c604949ac556fcbb81c42b537707f8c5afc31164dee11954d484b583b1f17fa84d0a9adbcede3ec1372e48d3b3cd136931767e6784362c45ed1159912417bcb18d6bee97a2048c0";
-    const headers = {
-        Authorization: `bearer ${accessToken}`
-    };
-    const { showToast , ...optionsRest } = options;
-    const defaultParams = {
-        headers,
-        method,
-        url,
-        ...optionsRest
-    };
-    const paramConfigs = {
-        ...defaultParams,
-        params: data1
-    };
-    if (method !== "get" && method !== "delete") {
-        delete paramConfigs.params;
-        const formData = new FormData();
-        for(const key in data1){
-            const value = data1[key];
-            if ((0,lodash__WEBPACK_IMPORTED_MODULE_2__.isArray)(value)) {
-                value.forEach((i)=>formData.append(key, i)
-                );
-            } else formData.append(key, value);
-        }
-        paramConfigs.data = formData;
-    }
-    return new Promise((resolve)=>{
-        axios__WEBPACK_IMPORTED_MODULE_0___default()(paramConfigs).then((res)=>{
-            let { data ={}  } = res;
-            const error = data.error;
-            const message = (error || {}).message;
-            data = {
-                status: !error,
-                text: message || "C\xf3 l\u1ED7i x\u1EA3y ra, vui l\xf2ng th\u1EED l\u1EA1i sau!",
-                data: data
-            };
-            resolve(data);
-            callback(data);
-        });
-    });
-};
-/**
- * Request process callback with method GET
- *
- * @param {String} url Request URL
- * @param {Object} params Request params
- * @param {Function} callback callback
- */ const apiGet = (url = "", params = {}, callback, showToast)=>{
-    return request("get", url, params, callback, {
-        showToast
-    });
-};
-/**
- * Request process callback with method POST
- *
- * @param {String} url Request URL
- * @param {Object} params Request params
- * @param {Function} callback callback
- */ const apiPost = (url = "", params = {}, callback, showToast)=>{
-    return request("post", url, params, callback, {
-        showToast
-    });
-};
-/**
- * Request process callback with method PUT
- *
- * @param {String} url Request URL
- * @param {Object} params Request params
- * @param {Function} callback callback
- */ const apiPut = (url = "", params = {}, callback, showToast)=>{
-    return request("put", url, params, callback, {
-        showToast
-    });
-};
-/**
- * Request process callback with method DELETE
- *
- * @param {String} url Request URL
- * @param {Object} params Request params
- * @param {Function} callback callback
- */ const apiDelete = (url = "", params = {}, callback, showToast)=>{
-    return request("delete", url, params, callback, {
-        showToast
-    });
-};
-const useApis = ()=>({
-        apiGet,
-        apiPost,
-        apiPut,
-        apiDelete,
-        request
-    })
-;
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-    get: apiGet,
-    post: apiPost,
-    put: apiPut,
-    delete: apiDelete,
-    request
-});
-
-
-/***/ }),
-
-/***/ 3827:
+/***/ 6716:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
+  "E_": () => (/* reexport */ getCroppedUrl),
+  "fi": () => (/* reexport */ getFileFromImage),
   "v$": () => (/* reexport */ getLsPhotos),
   "kb": () => (/* reexport */ randomId),
   "T8": () => (/* reexport */ saveLsPhotos)
@@ -984,6 +938,82 @@ const trimFileName = (fileName = "")=>{
 };
 const createFileName = (fileName)=>randomId() + "_" + trimFileName(fileName)
 ;
+
+;// CONCATENATED MODULE: ./src/utils/canvas.ts
+
+
+const drawRoundedImage = (ctx, image, x, y, radius, width, height)=>{
+    if (!image) return;
+    if (!width) width = image.width;
+    if (!height) height = image.height;
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.lineTo(x + width - radius, y);
+    ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+    ctx.lineTo(x + width, y + height - radius);
+    ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+    ctx.lineTo(x + radius, y + height);
+    ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+    ctx.lineTo(x, y + radius);
+    ctx.quadraticCurveTo(x, y, x + radius, y);
+    ctx.closePath();
+    ctx.clip();
+    ctx.drawImage(image, x, y, width, height);
+    ctx.restore();
+};
+const resizeImage = (dataUrl, newWidth, newHeight, callback)=>{
+    const image = new Image();
+    image.src = dataUrl;
+    image.onload = ()=>{
+        const canvas = document.createElement("canvas");
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(image, 0, 0, newWidth, newHeight);
+        canvas.toBlob((blob)=>{
+            const file = new File([
+                blob
+            ], "file.png");
+            callback(file);
+        }, "image/png", 0.85);
+    };
+};
+const createImage = (url)=>new Promise((resolve)=>{
+        const image = new Image();
+        image.setAttribute("crossorigin", "anonymous");
+        image.onload = ()=>resolve(image)
+        ;
+        image.src = url;
+    })
+;
+const getCroppedUrl = async (imageSrc, crop)=>{
+    const image = await createImage(imageSrc);
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = constants/* FULL_SIZE */.lM;
+    canvas.height = constants/* FULL_SIZE */.lM;
+    ctx === null || ctx === void 0 ? void 0 : ctx.drawImage(image, crop.x, crop.y, crop.width, crop.height, 0, 0, constants/* FULL_SIZE */.lM, constants/* FULL_SIZE */.lM);
+    return canvas.toDataURL("image/jpeg");
+};
+const getFileFromImage = async (imageSrc)=>{
+    const image = await createImage(imageSrc);
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = image.width;
+    canvas.height = image.height;
+    ctx === null || ctx === void 0 ? void 0 : ctx.drawImage(image, 0, 0, image.width, image.height);
+    return new Promise((resolve)=>{
+        canvas.toBlob((blob)=>{
+            const file = new File([
+                blob
+            ], `${randomId()}.jpg`, {
+                type: "image/jpg"
+            });
+            resolve(file);
+        }, "image/jpeg");
+    });
+};
 
 ;// CONCATENATED MODULE: ./src/utils/index.ts
 

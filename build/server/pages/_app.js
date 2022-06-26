@@ -73,21 +73,27 @@ const theme = (0,material_.createTheme)({
     }
 });
 
+// EXTERNAL MODULE: ./src/components/index.tsx + 21 modules
+var components = __webpack_require__(6240);
 ;// CONCATENATED MODULE: ./src/pages/_app.tsx
 
 
 
 
 // import { useRouter } from "next/router";
+
 function MyApp({ Component , pageProps  }) {
     const AnyComponent = Component;
     // const router = useRouter();
     // console.log(router);
-    return /*#__PURE__*/ jsx_runtime_.jsx(material_.ThemeProvider, {
+    return /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.ThemeProvider, {
         theme: theme,
-        children: /*#__PURE__*/ jsx_runtime_.jsx(AnyComponent, {
-            ...pageProps
-        })
+        children: [
+            /*#__PURE__*/ jsx_runtime_.jsx(AnyComponent, {
+                ...pageProps
+            }),
+            /*#__PURE__*/ jsx_runtime_.jsx(components/* ToastContainer */.Ix, {})
+        ]
     });
 }
 /* harmony default export */ const _app = (MyApp);
@@ -99,6 +105,132 @@ function MyApp({ Component , pageProps  }) {
 /***/ ((module) => {
 
 module.exports = require("@mui/material");
+
+/***/ }),
+
+/***/ 562:
+/***/ ((module) => {
+
+module.exports = require("next/dist/server/denormalize-page-path.js");
+
+/***/ }),
+
+/***/ 4014:
+/***/ ((module) => {
+
+module.exports = require("next/dist/shared/lib/i18n/normalize-locale-path.js");
+
+/***/ }),
+
+/***/ 8524:
+/***/ ((module) => {
+
+module.exports = require("next/dist/shared/lib/is-plain-object.js");
+
+/***/ }),
+
+/***/ 8020:
+/***/ ((module) => {
+
+module.exports = require("next/dist/shared/lib/mitt.js");
+
+/***/ }),
+
+/***/ 4964:
+/***/ ((module) => {
+
+module.exports = require("next/dist/shared/lib/router-context.js");
+
+/***/ }),
+
+/***/ 3938:
+/***/ ((module) => {
+
+module.exports = require("next/dist/shared/lib/router/utils/format-url.js");
+
+/***/ }),
+
+/***/ 9565:
+/***/ ((module) => {
+
+module.exports = require("next/dist/shared/lib/router/utils/get-asset-path-from-route.js");
+
+/***/ }),
+
+/***/ 1428:
+/***/ ((module) => {
+
+module.exports = require("next/dist/shared/lib/router/utils/is-dynamic.js");
+
+/***/ }),
+
+/***/ 1292:
+/***/ ((module) => {
+
+module.exports = require("next/dist/shared/lib/router/utils/parse-relative-url.js");
+
+/***/ }),
+
+/***/ 979:
+/***/ ((module) => {
+
+module.exports = require("next/dist/shared/lib/router/utils/querystring.js");
+
+/***/ }),
+
+/***/ 6052:
+/***/ ((module) => {
+
+module.exports = require("next/dist/shared/lib/router/utils/resolve-rewrites.js");
+
+/***/ }),
+
+/***/ 4226:
+/***/ ((module) => {
+
+module.exports = require("next/dist/shared/lib/router/utils/route-matcher.js");
+
+/***/ }),
+
+/***/ 5052:
+/***/ ((module) => {
+
+module.exports = require("next/dist/shared/lib/router/utils/route-regex.js");
+
+/***/ }),
+
+/***/ 4241:
+/***/ ((module) => {
+
+module.exports = require("next/dist/shared/lib/router/utils/routing-items.js");
+
+/***/ }),
+
+/***/ 9232:
+/***/ ((module) => {
+
+module.exports = require("next/dist/shared/lib/utils.js");
+
+/***/ }),
+
+/***/ 968:
+/***/ ((module) => {
+
+module.exports = require("next/head");
+
+/***/ }),
+
+/***/ 6689:
+/***/ ((module) => {
+
+module.exports = require("react");
+
+/***/ }),
+
+/***/ 6335:
+/***/ ((module) => {
+
+module.exports = require("react-easy-crop");
 
 /***/ }),
 
@@ -116,7 +248,7 @@ module.exports = require("react/jsx-runtime");
 var __webpack_require__ = require("../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = (__webpack_exec__(2493));
+var __webpack_exports__ = __webpack_require__.X(0, [895,664,240], () => (__webpack_exec__(2493)));
 module.exports = __webpack_exports__;
 
 })();
