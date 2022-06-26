@@ -3,8 +3,8 @@ import Button from "../../button/Button";
 import Modal from "../../modal/Modal";
 import { DialogActions, DialogContent, Slider } from "@mui/material";
 import Cropper from "react-easy-crop";
-import { getCroppedImg, uploadImage } from "./utils";
-import { CANVAS_SIZE } from "./constants";
+import { getCroppedUrl } from "utils";
+import { CANVAS_SIZE } from "configs/constants";
 
 import frameWhite from "assets/images/frame_white.png";
 
@@ -16,7 +16,7 @@ interface Props {
   minZoom: number;
   maxZoom: number;
   onClose: any;
-  onConfirm: (url: string, zoom: number, crop: { x: number; y: number }, croppedFile: any) => void;
+  onConfirm: (url: string, zoom: number, crop: { x: number; y: number }) => void;
 }
 
 const ModalCrop: React.FC<Props> = ({
@@ -47,13 +47,11 @@ const ModalCrop: React.FC<Props> = ({
 
   const handleConfirm = async () => {
     setLoading(true);
-    const file = await getCroppedImg(url, ref.current.getCropData().croppedAreaPixels);
+    const croppedUrl = await getCroppedUrl(url, ref.current.getCropData().croppedAreaPixels);
 
-    uploadImage(file, (url) => {
-      setLoading(false);
-      onConfirm(url, zoom, crop, file);
-      onClose();
-    });
+    setLoading(false);
+    onConfirm(croppedUrl, zoom, crop);
+    onClose();
   };
 
   return (
